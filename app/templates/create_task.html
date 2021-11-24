@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Task{% endblock title %}
+
+{% block content %}
+    <h1>Create Task</h1>
+    <form action="{{ url_for('create_task') }}" method="POST">
+        <label for="task_name">Name</label>
+        <input type="text" id="name" name="name"><br />
+        <label for="task_name">Body</label>
+        <input type="text" id="body" name="body"><br />
+        <label for="task_name">Priority</label>
+        <input type="number" id="priority" name="priority"><br />
+        <input type="submit" class="btn btn-success" value="Create">
+    </form>
+{% endblock content %}
