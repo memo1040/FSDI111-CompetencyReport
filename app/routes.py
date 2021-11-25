@@ -17,8 +17,8 @@ TLIST = []
 
 @app.get("/")
 def index():
-    Task.query.all()
-    return render_template("home.html")
+    tasks = Task.query.all()
+    return render_template("home.html", task_list=tasks)
 
 
 @app.get("/about")
@@ -37,13 +37,27 @@ def get_form():
 
 
 @app.post("/tasks")
-def create_task(name, body, priority):
+def create_task():
+    task_data = request.form
     db.session.add(
         Task(
-            name=name,
-            body=body,
-            priority=priority
+            name=task_data.get("name"),
+            body=task_data.get("body"),
+            priority=int(task_data.get("priority"))
         )
     )
+    db.session.commit()
+    return redirect("/")
+
+
+@app.get("/tasks/<int:pk>")
+def get_single_task(pk):
+    task = Task.query.filter_by(id=pk).first()
+    return render_template("detail_view.html", task=task)
+
+
+@app.get("/tasks/<int:pk>/delete")
+def finish_task(pk):
+    Task.query.filter_by(id=pk).delete()
     db.session.commit()
     return redirect("/")
